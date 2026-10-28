@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReelReview - Movie Ratings</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#10121a;color:white}
+header{padding:20px 6%;background:#1c1e29;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:bold;color:#ffca45}
+nav a{color:white;text-decoration:none;margin:0 10px}
+.hero{padding:55px 7%;background:linear-gradient(90deg,#161323,#42304e)}
+.hero h1{font-size:42px;margin-bottom:10px}
+.hero p{line-height:1.7;color:#ddd}
+section{padding:35px 6%}
+input,select{padding:12px;border-radius:8px;border:1px solid #555;background:#222531;color:white;margin:5px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:#20232f;border-radius:12px;overflow:hidden}
+.card img{width:100%;height:220px;object-fit:cover}
+.card div{padding:14px}
+.card h3{margin:8px 0}
+.rating{color:#ffca45;font-weight:bold}
+.card p{color:#d0d0d0;line-height:1.5}
+button{background:#ffca45;color:#171717;padding:10px 14px;border:0;border-radius:7px;cursor:pointer;font-weight:bold}
+footer{background:#08090d;text-align:center;padding:22px;color:#bbb}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.hero h1{font-size:32px}header{flex-wrap:wrap;gap:10px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">🎬 ReelReview</div>
+ <nav><a href="#movies">Movies</a><a href="#reviews">Reviews</a></nav>
+</header>
+
+<div class="hero">
+ <h1>Discover Your Next Favourite Movie</h1>
+ <p>Explore movies, check ratings, discover film genres and read reviews before watching.</p>
+</div>
+
+<section id="movies">
+ <h2>Popular Movies</h2>
+ <input type="text" id="search" placeholder="Search movie..." oninput="displayMovies()">
+ <select id="genre" onchange="displayMovies()">
+  <option value="All">All Genres</option>
+  <option>Action</option>
+  <option>Drama</option>
+  <option>Science Fiction</option>
+  <option>Animation</option>
+ </select>
+ <div class="grid" id="movieGrid"></div>
+</section>
+
+<section id="reviews">
+ <h2>Write a Movie Review</h2>
+ <input id="movieName" placeholder="Movie name">
+ <input id="reviewText" placeholder="Write your review">
+ <button onclick="addReview()">Submit Review</button>
+ <div id="reviewList"></div>
+</section>
+
+<footer>ReelReview | Movie Review and Rating Website</footer>
+
+<script>
+const movies=[
+ {name:"Interstellar",genre:"Science Fiction",year:2014,rating:8.7,cast:"Matthew McConaughey, Anne Hathaway",desc:"A space adventure about humanity's future.",img:"https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=500"},
+ {name:"The Dark Knight",genre:"Action",year:2008,rating:9.0,cast:"Christian Bale, Heath Ledger",desc:"A hero faces a dangerous criminal in Gotham.",img:"https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=500"},
+ {name:"Shawshank Redemption",genre:"Drama",year:1994,rating:9.3,cast:"Tim Robbins, Morgan Freeman",desc:"A powerful story of friendship and hope.",img:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500"},
+ {name:"Spider-Verse",genre:"Animation",year:2023,rating:8.6,cast:"Shameik Moore, Hailee Steinfeld",desc:"A young hero discovers a multiverse of heroes.",img:"https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500"},
+ {name:"Dune Part Two",genre:"Science Fiction",year:2024,rating:8.5,cast:"Timothée Chalamet, Zendaya",desc:"A journey of destiny and survival on a desert planet.",img:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=500"},
+ {name:"Top Gun Maverick",genre:"Action",year:2022,rating:8.2,cast:"Tom Cruise, Miles Teller",desc:"An experienced pilot trains a new generation.",img:"https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=500"},
+ {name:"Little Women",genre:"Drama",year:2019,rating:7.8,cast:"Saoirse Ronan, Florence Pugh",desc:"Four sisters explore family, life and ambition.",img:"https://images.unsplash.com/photo-1519682337058-a94d519337bc?w=500"},
+ {name:"Coco",genre:"Animation",year:2017,rating:8.4,cast:"Anthony Gonzalez, Gael García Bernal",desc:"A music-loving boy discovers his family history.",img:"https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=500"}
+];
+
+function displayMovies(){
+ const query=document.getElementById("search").value.toLowerCase();
+ const genre=document.getElementById("genre").value;
+ const results=movies.filter(m=>
+  m.name.toLowerCase().includes(query)&&
+  (genre==="All"||m.genre===genre)
+ );
+ document.getElementById("movieGrid").innerHTML=results.map(m=>`
+ <div class="card">
+ <img src="${m.img}" alt="${m.name}">
+ <div><h3>${m.name}</h3>
+ <p>${m.genre} | ${m.year}</p>
+ <p class="rating">⭐ ${m.rating}/10</p>
+ <p>${m.desc}</p>
+ <p><b>Cast:</b> ${m.cast}</p>
+ <button onclick="showDetails('${m.name}')">Read More</button>
+ </div></div>`).join("")||"<p>No movies found.</p>";
+}
+
+function showDetails(name){
+ const m=movies.find(movie=>movie.name===name);
+ alert(m.name+" ("+m.year+")\nGenre: "+m.genre+"\nRating: "+m.rating+"/10\nCast: "+m.cast+"\n\n"+m.desc);
+}
+
+function addReview(){
+ const name=document.getElementById("movieName").value.trim();
+ const review=document.getElementById("reviewText").value.trim();
+ if(!name||!review){alert("Enter a movie name and review.");return;}
+ const p=document.createElement("p");
+ p.textContent="🎬 "+name+": "+review;
+ document.getElementById("reviewList").prepend(p);
+ document.getElementById("movieName").value="";
+ document.getElementById("reviewText").value="";
+}
+displayMovies();
+</script>
+</body>
+</html>

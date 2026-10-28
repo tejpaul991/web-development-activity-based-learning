@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crave Corner - Food Ordering</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#fff8f0;color:#292929}
+header{background:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px #ddd;position:sticky;top:0}
+.logo{color:#ff6333;font-size:24px;font-weight:bold}
+nav a{margin:0 10px;text-decoration:none;color:#333}
+button{background:#ff6333;color:white;border:0;padding:10px 16px;border-radius:8px;cursor:pointer}
+.hero{padding:55px 7%;background:#ffe5ce;display:flex;align-items:center;gap:30px}
+.hero div{flex:1}.hero h1{font-size:45px}.hero img{width:45%;border-radius:20px}
+section{padding:35px 7%}
+.filters{text-align:center;margin:20px}
+.filters button{margin:5px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:white;border-radius:14px;overflow:hidden;box-shadow:0 3px 12px #ddd}
+.card img{width:100%;height:180px;object-fit:cover}
+.card div{padding:15px}
+.price{color:#ff6333;font-weight:bold;font-size:18px}
+.offer{background:#292929;color:white;padding:25px;border-radius:15px}
+footer{background:#292929;color:white;padding:25px;text-align:center}
+@media(max-width:650px){.hero{flex-direction:column}.hero img{width:100%}.grid{grid-template-columns:1fr}nav a{margin:3px;font-size:13px}.hero h1{font-size:35px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">🍴 Crave Corner</div>
+ <nav><a href="#menu">Menu</a><a href="#offers">Offers</a><a href="#reviews">Reviews</a></nav>
+ <button onclick="showCart()">Cart (<span id="count">0</span>)</button>
+</header>
+
+<div class="hero">
+ <div>
+  <h1>Delicious Food, Delivered Fast!</h1>
+  <p>Discover tasty meals prepared fresh for you. Choose your favourites and enjoy every bite.</p>
+  <a href="#menu"><button>Explore Menu</button></a>
+ </div>
+ <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700" alt="Burger">
+</div>
+
+<section id="menu">
+ <h2>Our Popular Menu</h2>
+ <div class="filters">
+  <button onclick="filterFood('All')">All</button>
+  <button onclick="filterFood('Burger')">Burgers</button>
+  <button onclick="filterFood('Pizza')">Pizza</button>
+  <button onclick="filterFood('Dessert')">Desserts</button>
+ </div>
+ <div class="grid" id="foodGrid"></div>
+</section>
+
+<section id="offers">
+ <div class="offer">
+  <h2>Special Offer!</h2>
+  <p>Get 20% off your first order. Use code <b>CRAVE20</b>.</p>
+ </div>
+</section>
+
+<section id="reviews">
+ <h2>Customer Reviews</h2>
+ <p>⭐⭐⭐⭐⭐ "Amazing food and quick service!" — Ananya</p>
+ <p>⭐⭐⭐⭐⭐ "Great menu and delicious pizza!" — Rahul</p>
+</section>
+
+<footer>Crave Corner | Open daily: 10 AM – 11 PM</footer>
+
+<script>
+const foods=[
+ {name:"Cheese Burger",cat:"Burger",price:149,img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"},
+ {name:"Double Burger",cat:"Burger",price:219,img:"https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=500"},
+ {name:"Margherita Pizza",cat:"Pizza",price:249,img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500"},
+ {name:"Veg Pizza",cat:"Pizza",price:299,img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500"},
+ {name:"Chocolate Brownie",cat:"Dessert",price:99,img:"https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500"},
+ {name:"Cheesecake",cat:"Dessert",price:139,img:"https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=500"}
+];
+let cart=[];
+
+function displayFood(items){
+ document.getElementById("foodGrid").innerHTML=items.map((f,i)=>`
+ <div class="card">
+ <img src="${f.img}" alt="${f.name}">
+ <div><h3>${f.name}</h3><p>Fresh and delicious food.</p>
+ <p class="price">₹${f.price}</p>
+ <button onclick="addCart('${f.name}')">Add to Cart</button>
+ </div></div>`).join("");
+}
+function filterFood(category){
+ displayFood(category==="All"?foods:foods.filter(f=>f.cat===category));
+}
+function addCart(name){
+ cart.push(name);
+ document.getElementById("count").textContent=cart.length;
+ alert(name+" added to cart!");
+}
+function showCart(){
+ if(cart.length===0){alert("Your cart is empty!");return;}
+ alert("Your items:\n"+cart.join("\n")+"\n\nThis is a demo website.");
+}
+displayFood(foods);
+</script>
+</body>
+</html>
